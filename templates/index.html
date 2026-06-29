@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مارنجان - لوحة التحكم الشاملة</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { background-color: #0b1120; color: #ffffff; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
+        .main-container { background-color: #161b22; border: 2px solid #00e5ff; border-radius: 35px; padding: 25px; width: 100%; max-width: 420px; box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); }
+        
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; font-size: 0.9em; font-weight: bold; }
+        .sparkle { background: rgba(0, 229, 255, 0.1); color: #00e5ff; padding: 5px 10px; border-radius: 10px; border: 1px solid #00e5ff; }
+        
+        .center-icon { text-align: center; margin-bottom: 20px; }
+        .moon { font-size: 4em; margin: 0; }
+        
+        .welcome-box { background-color: #1f2937; border-radius: 20px; padding: 15px; text-align: center; margin-bottom: 25px; }
+        .welcome-box h2 { color: #00e5ff; margin: 0 0 10px 0; font-size: 1.3em; }
+        .welcome-box p { font-size: 0.85em; color: #9ca3af; }
+
+        /* الشبكة الديناميكية للخدمات */
+        .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .service-card { background-color: #1f2937; border-radius: 15px; padding: 15px; text-align: center; text-decoration: none; color: #ffffff; transition: 0.3s; border: 1px solid transparent; }
+        .service-card:hover { border-color: #00e5ff; transform: translateY(-3px); background-color: #273548; }
+        .service-card .icon { font-size: 1.8em; display: block; margin-bottom: 5px; }
+        .service-card span { font-size: 0.9em; font-weight: bold; }
+
+        .action-buttons { display: flex; justify-content: space-between; gap: 10px; }
+        .btn { flex: 1; padding: 12px 5px; text-align: center; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 0.85em; transition: 0.3s; }
+        .btn-outline { border: 1px solid #00e5ff; color: #00e5ff; }
+        .btn-solid { background-color: #00e5ff; color: #000; border: none; }
+        .btn:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="top-header">
+            <span class="sparkle">✨</span>
+            <span>مرحباً بك في مارنجان</span>
+        </div>
+
+        <div class="center-icon">
+            <div class="moon">🌙</div>
+        </div>
+
+        <div class="welcome-box">
+            <h2>{{ settings.site_title|default:"خدمات مارنجان" }}</h2>
+            <p>{{ settings.site_description|default:"كل ما تحتاجه في مكان واحد" }}</p>
+        </div>
+
+        <div class="services-grid">
+            {% for service in services %}
+            <a href="{{ service.link }}" class="service-card">
+                <span class="icon">{{ service.icon }}</span>
+                <span>{{ service.title }}</span>
+            </a>
+            {% empty %}
+            <p style="grid-column: span 2; text-align: center; color: #555;">لا توجد خدمات مضافة حالياً.</p>
+            {% endfor %}
+        </div>
+
+<div class="action-buttons">
+    <a href="{% url 'core:register' %}" class="btn btn-outline">حساب جديد</a>
+
+    <a href="{% url 'core:login' %}" class="btn btn-solid">تسجيل دخول</a>
+
+    <a href="{% url 'core:logout' %}" class="btn btn-outline">خروج</a>
+</div>
