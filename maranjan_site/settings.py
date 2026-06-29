@@ -47,6 +47,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'maranjan_site.wsgi.application'
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'community',  # <-- هذا هو تطبيقنا الجديد
+    'core',
+
+]
+
 
 DATABASES = {
     'default': {
