@@ -68,3 +68,25 @@
 
     <a href="{% url 'core:logout' %}" class="btn btn-outline">خروج</a>
 </div>
+    <div class="welcome-box" style="margin-top: 30px; direction: rtl; text-align: right;">
+        <h2 style="color: #007bff; font-size: 1.5rem; border-bottom: 2px solid #007bff; padding-bottom: 8px; margin-bottom: 20px;">
+            ✨ أحدث أخبار ومشاركات الحي
+        </h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            {% for post in latest_posts %}
+                <div style="background-color: #1f2937; border: 1px solid #00e5ff; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <h3 style="color: #00e5ff; margin-top: 0; font-size: 1.2rem;">{{ post.title }}</h3>
+                    <p style="color: #ffffff; font-size: 0.95rem; line-height: 1.5; white-space: pre-line;">{{ post.content }}</p>
+                    <div style="color: #9ca3af; font-size: 0.8rem; border-top: 1px solid #374151; padding-top: 8px; margin-top: 10px; display: flex; justify-content: space-between;">
+                        <span>✍️ بواسطة: {{ post.author.username }}</span>
+                        <span>📅 {{ post.created_at|date:"Y-m-d H:i" }}</span>
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color: #9ca3af; text-align: center; font-style: italic; padding: 10px;">
+                    لا توجد منشورات أو أخبار حالياً في مجتمع مارنجان.
+                </p>
+            {% endfor %}
+        </div>
+    </div>

@@ -3,6 +3,19 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Service
 
+from django.shortcuts import render
+from .models import Service  # الموديل القديم لو موجود
+from community.models import Post  # استيراد موديل المنشورات الجديد
+
+def home(request):
+    # جلب آخر 5 منشورات تم نشرها
+    latest_posts = Post.objects.order_by('-created_at')[:5]
+    
+    context = {
+        'latest_posts': latest_posts,
+    }
+    return render(request, 'core/home.html', context) # تأكد من اسم ملف الـ html عندك
+
 # 1. الصفحة الرئيسية
 def index(request):
     services = Service.objects.all()
