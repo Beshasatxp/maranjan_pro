@@ -1,95 +1,59 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أخبار ومشاركات حي مارنجان</title>
+    <title>أخبار مجتمع مارنجان</title>
     <style>
-        body {
-            background-color: #0d1117;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            direction: rtl;
-            text-align: right;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #00e5ff;
-            padding-bottom: 10px;
-        }
-        .header h1 {
-            color: #00e5ff;
-        }
-        .post-card {
-            background-color: #1f2937;
-            border: 1px solid #374151;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .post-title {
-            color: #00e5ff;
-            margin-top: 0;
-            font-size: 1.4rem;
-        }
-        .post-content {
-            font-size: 1rem;
-            line-height: 1.6;
-            white-space: pre-line;
-            color: #e5e7eb;
-        }
-        .post-meta {
-            color: #9ca3af;
-            font-size: 0.85rem;
-            border-top: 1px solid #374151;
-            padding-top: 10px;
-            margin-top: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .back-btn {
-            display: inline-block;
-            background-color: #00e5ff;
-            color: #0d1117;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .back-btn:hover {
-            opacity: 0.9;
-        }
+        body { background-color: #0d1117; color: #ffffff; font-family: Arial, sans-serif; padding: 20px; direction: rtl; text-align: right; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #00e5ff; padding-bottom: 10px; }
+        .header h1 { color: #00e5ff; }
+        .post-card { background-color: #1f2937; border: 1px solid #374151; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .post-title { color: #00e5ff; margin-top: 0; font-size: 1.4rem; }
+        .post-content { font-size: 1rem; line-height: 1.6; white-space: pre-line; color: #e5e7eb; }
+        .post-meta { color: #9ca3af; font-size: 0.85rem; border-top: 1px solid #374151; padding-top: 10px; margin-top: 15px; display: flex; justify-content: space-between; }
+        .back-btn { display: inline-block; background-color: #00e5ff; color: #0d1117; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-bottom: 20px; }
+        .comment-section { margin-top: 20px; padding-top: 15px; border-top: 1px solid #374151; }
+        input[type="text"] { width: 70%; padding: 8px; border-radius: 4px; border: none; }
+        button { background-color: #00e5ff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="/" class="back-btn">⬅️ العودة للرئيسية</a>
-        
+        <a href="/" class="back-btn">← العودة للرئيسية</a>
         <div class="header">
-            <h1>📰 أخبار ومشاركات مجتمع مارنجان</h1>
+            <h1>أخبار ومشاركات مجتمع مارنجان 📰</h1>
         </div>
 
         {% for post in posts %}
-            <div class="post-card">
-                <h2 class="post-title">{{ post.title }}</h2>
-                <p class="post-content">{{ post.content }}</p>
-                <div class="post-meta">
-                    <span>✍️ بواسطة: {{ post.author.username }}</span>
-                    <span>📅 {{ post.created_at|date:"Y-m-d H:i" }}</span>
-                </div>
+        <div class="post-card">
+            <h2 class="post-title">{{ post.title }}</h2>
+            <p class="post-content">{{ post.content }}</p>
+            
+            <div class="post-meta">
+                <span>👍 الكاتب: {{ post.author.username }}</span>
+                <span>📅 {{ post.created_at|date:"Y-m-d" }}</span>
             </div>
+
+            <div class="comment-section">
+                <h4>التعليقات ({{ post.comments.count }})</h4>
+                {% for comment in post.comments.all %}
+                    <p><strong>{{ comment.user.username }}:</strong> {{ comment.body }}</p>
+                {% endfor %}
+
+                {% if user.is_authenticated %}
+                    <form action="{% url 'community:add_comment' post.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="body" placeholder="اكتب تعليقك..." required>
+                        <button type="submit">نشر</button>
+                    </form>
+                {% else %}
+                    <p><a href="{% url 'login' %}">سجل دخولك</a> لتتمكن من التعليق.</p>
+                {% endif %}
+            </div>
+        </div>
         {% empty %}
-            <p style="text-align: center; color: #9ca3af; font-style: italic;">
-                لا توجد أخبار أو منشورات منشورة حالياً.
-            </p>
+            <p style="text-align: center; color: #9ca3af;">لا توجد منشورات حالياً في أخبار الحي.</p>
         {% endfor %}
     </div>
 </body>
